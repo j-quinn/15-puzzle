@@ -53,6 +53,8 @@ class Game extends Component {
     let left = { exists: true, index: 0 };
     let right = { exists: true, index: 0 };
 
+    let direction = null;
+
     up = i - numRows >= 0 ? { exists: true, index: i - numRows } : up;
     down =
       i + numRows < numSquares ? { exists: true, index: i + numRows } : down;
@@ -60,65 +62,20 @@ class Game extends Component {
     right =
       (i % numRows) + 1 < numRows ? { exists: true, index: i + 1 } : right;
 
-    console.log(
-      'Current square: %i, up: %i, down: %i, left: %i, right: %i',
-      i,
-      up.index,
-      down.index,
-      left.index,
-      right.index
-    );
-
     if (up.exists && this.state.squares[up.index].value === 0) {
-      console.log('Empty square above');
-      this.setState(theSquares => ({
-        squares: theSquares.squares.map(square =>
-          square.index === up.index
-            ? { ...square, value: this.state.squares[i].value }
-            : square
-        )
-      }));
-      this.setState(theSquares => ({
-        squares: theSquares.squares.map(square =>
-          square.index === i ? { ...square, value: 0 } : square
-        )
-      }));
+      direction = up;
+    } else if (down.exists && this.state.squares[down.index].value === 0) {
+      direction = down;
+    } else if (left.exists && this.state.squares[left.index].value === 0) {
+      direction = left;
+    } else if (right.exists && this.state.squares[right.index].value === 0) {
+      direction = right;
     }
-    if (down.exists && this.state.squares[down.index].value === 0) {
-      console.log('Empty square below');
+
+    if (direction) {
       this.setState(theSquares => ({
         squares: theSquares.squares.map(square =>
-          square.index === down.index
-            ? { ...square, value: this.state.squares[i].value }
-            : square
-        )
-      }));
-      this.setState(theSquares => ({
-        squares: theSquares.squares.map(square =>
-          square.index === i ? { ...square, value: 0 } : square
-        )
-      }));
-    }
-    if (left.exists && this.state.squares[left.index].value === 0) {
-      console.log('Empty square left');
-      this.setState(theSquares => ({
-        squares: theSquares.squares.map(square =>
-          square.index === left.index
-            ? { ...square, value: this.state.squares[i].value }
-            : square
-        )
-      }));
-      this.setState(theSquares => ({
-        squares: theSquares.squares.map(square =>
-          square.index === i ? { ...square, value: 0 } : square
-        )
-      }));
-    }
-    if (right.exists && this.state.squares[right.index].value === 0) {
-      console.log('Empty square right');
-      this.setState(theSquares => ({
-        squares: theSquares.squares.map(square =>
-          square.index === right.index
+          square.index === direction.index
             ? { ...square, value: this.state.squares[i].value }
             : square
         )
@@ -132,7 +89,6 @@ class Game extends Component {
   }
 
   render() {
-    console.log(this.state.squares);
     return (
       <div>
         <Board
