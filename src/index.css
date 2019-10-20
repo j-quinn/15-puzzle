@@ -1,4 +1,8 @@
 .gameBoard {
+  display: grid;
+  position: relative;
+  left: 33%;
+  top: 100px;
 }
 
 /* the ":after" changes the render from one row into multiple rows */
